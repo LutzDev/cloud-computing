@@ -1,0 +1,20 @@
+# To call the pods from outside the cluster
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-{{ .Values.author }}-{{ .Values.app }}
+  labels:
+    app: {{ .Values.app }}
+    author: {{ .Values.author }}
+spec:
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+          - path: "/weigoldl-frontend"
+            pathType: Prefix
+            backend:
+              service:
+                name: service-{{ .Values.author }}-{{ .Values.app }}
+                port:
+                  number: 80

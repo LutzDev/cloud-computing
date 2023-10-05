@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.author }}-{{ .Values.app }}
+  labels:
+    app: {{ .Values.app }}
+    author: {{ .Values.author }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+      author: {{ .Values.author }}
+  template:
+    metadata:
+      name: {{ .Values.author }}-{{ .Values.app }}
+      labels:
+        app: {{ .Values.app }}
+        author: {{ .Values.author }}
+    spec:
+      containers:
+        - name: {{ .Values.app }}-{{ .Values.author }}-container
+          image: {{ .Values.image }}
+{{/*  worker containers need rabbitmq for the access to the message queue
+ and mongodb for saving hashes there  */}}
+          env:
+            - name: SPRING_DATA_MONGODB_HOST
+              value: {{ .Values.author }}-{{ .Values.app }}-mongodb
+            - name: SPRING_RABBITMQ_HOST
+              value: rabbitmq.rabbitmq
+          resources:
+            limits:
+              memory: {{ .Values.limitMem }}
+            requests:
+              memory: {{ .Values.requestMem }}
+          livenessProbe:
+            initialDelaySeconds: 15
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+          readinessProbe:
+            initialDelaySeconds: 15
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080

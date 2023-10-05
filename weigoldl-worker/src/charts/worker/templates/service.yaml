@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.author }}-{{ .Values.app }}
+  labels:
+    app: {{ .Values.app }}
+    author: {{ .Values.author }}
+spec:
+  ports:
+    - name: web
+      port: 80
+      targetPort: 8080
+  selector:
+    app: {{ .Values.app }}
+    author: {{ .Values.author }}

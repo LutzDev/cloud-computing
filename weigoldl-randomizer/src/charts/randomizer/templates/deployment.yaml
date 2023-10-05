@@ -1,0 +1,39 @@
+# Get pods with 'kubectl get pods -l author=weigoldl,app=randomizer'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.author }}-{{ .Values.app }}
+  labels:
+    app: {{ .Values.app }}
+    author: {{ .Values.author }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+      author: {{ .Values.author }}
+  template:
+    metadata:
+      name: {{ .Values.author }}-{{ .Values.app }}
+      labels:
+        app: {{ .Values.app }}
+        author: {{ .Values.author }}
+    spec:
+      containers:
+        - name: {{ .Values.app }}-{{ .Values.author }}-container
+          image: {{ .Values.image }}
+          resources:
+            limits:
+              memory: {{ .Values.limitMem }}
+            requests:
+              memory: {{ .Values.requestMem }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080

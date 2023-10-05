@@ -1,0 +1,25 @@
+server:
+  servlet:
+    context-path: /
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "info, health, prometheus"
+  metrics:
+    tags:
+      application: weigoldl-worker
+worker:
+  randomizerBackend: "http://service-weigoldl-randomizer/"
+  hasherBackend: "http://service-weigoldl-hasher/"
+  queue: "cnc.weigoldl-kubecoin"
+  routingKey: "weigoldl-kubecoin"
+spring:
+  rabbitmq:
+    port: 5672
+    username: cnc
+    password: cnc
+    virtual-host: /cnc
+    ssl:
+      enabled: false
+

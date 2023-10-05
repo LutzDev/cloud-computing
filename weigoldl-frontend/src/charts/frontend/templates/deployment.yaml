@@ -1,0 +1,41 @@
+# Get pods with 'kubectl get pods -l author=weigoldl,app=frontend'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.author }}-{{ .Values.app }}
+  labels:
+    app: {{ .Values.app }}
+    author: {{ .Values.author }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+      author: {{ .Values.author }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app }}
+        author: {{ .Values.author }}
+    spec:
+      containers:
+        - name: {{ .Values.author }}-{{ .Values.app }}--container
+          image: {{ .Values.image }}
+          env:
+            - name: SPRING_RABBITMQ_HOST
+              value: rabbitmq.rabbitmq
+          resources:
+            limits:
+              memory: {{ .Values.limits }}
+            requests:
+              memory: {{ .Values.requests }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            httpGet:
+              path: /{{ .Values.author }}-{{ .Values.app }}/actuator/health/liveness
+              port: 8080
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            httpGet:
+              path: /{{ .Values.author }}-{{ .Values.app }}/actuator/health/readiness
+              port: 8080

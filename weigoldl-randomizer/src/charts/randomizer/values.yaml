@@ -1,0 +1,7 @@
+replicaCount: 2
+image: docker.informatik.hs-furtwangen.de/cnc-weigoldl/randomizer:latest
+app: randomizer
+author: weigoldl
+requestMem: 32Mi
+limitMem: 256Mi
+initialDelaySeconds: 15

@@ -1,0 +1,9 @@
+# Define frequently used 'values'
+image: docker.informatik.hs-furtwangen.de/cnc-weigoldl/frontend:latest
+host: kube.informatik.hs-furtwangen.de
+app: frontend
+author: weigoldl
+replicaCount: 1
+limits: 256Mi
+requests: 32Mi
+initialDelaySeconds: 15

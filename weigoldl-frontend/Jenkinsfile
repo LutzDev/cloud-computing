@@ -1,0 +1,8 @@
+kubernetesPipeline {
+ scmUrl = 'https://gitlab.informatik.hs-furtwangen.de/cnc/weigoldl-frontend.git'
+ containerImage = 'docker.informatik.hs-furtwangen.de/cnc-weigoldl/frontend'
+ chartPath = './src/charts/frontend'
+ releaseName = 'weigoldl-frontend'
+ stagingNamespace = 'cnc'
+ branch = 'main'
+}
